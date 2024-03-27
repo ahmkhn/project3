@@ -34,6 +34,9 @@ public class CheckPoint {
         previous = point;
     }
     public boolean onPoint(int x, int y) {
+        if(x > bX1 && x < bX2 && y > bY1 && y < bY2) {
+            return false;
+        }
         return false;
     }
 }
