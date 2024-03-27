@@ -15,4 +15,15 @@ public class Car {
         goal = start.getPrevious();
         finished = false;
     }
+    public int getCarSpeed(){
+        return(this.speed);
+    }
+    public int getCarID(){
+        return(this.id);
+    } 
+    public void setCheckpoint(CheckPoint currentC, CheckPoint goalC){
+        this.current=currentC;
+        this.goal=goalC;
+    }
+    
 }
