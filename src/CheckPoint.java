@@ -33,9 +33,10 @@ public class CheckPoint {
     public void setPrevious(CheckPoint point) {
         previous = point;
     }
+    //checks if the x and y coordinates fall withing the checkPoint's bounds
     public boolean onPoint(int x, int y) {
         if(x > bX1 && x < bX2 && y > bY1 && y < bY2) {
-            return false;
+            return true;
         }
         return false;
     }
