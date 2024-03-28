@@ -23,7 +23,9 @@ public class Car {
     }
 
     // New methods
-    public void run() {
+    public void run() {//The car should move toward current.getNext(),
+        //set current to current.getNext on entry, and check if that point is
+        //the goal point, if so, the car is finished
         if (!finished) {
             // Calculate direction
             int dx = goal.getPathX() - posX;
