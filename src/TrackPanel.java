@@ -17,7 +17,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         g.setColor(Color.DARK_GRAY);
         for(CheckPoint point : track.getPoints()) {
             g.setStroke(new BasicStroke(40));
-            g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY())
+            g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
         }
         g.setStroke(new BasicStroke());
         for(Car car : track.getCars()) {
