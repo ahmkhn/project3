@@ -6,10 +6,37 @@ import java.awt.event.ActionListener;
 public class TrackPanel extends JPanel implements ActionListener {
     //Attributes
     private Track track;
-    private JButton start, add;
-    private JPanel redVal, greenVal, blueVal;
+    private JButton start, addCar;
+    private JTextField redVal, greenVal, blueVal;
     //Methods
-    public TrackPanel() {}
+    public TrackPanel() {
+        setPreferredSize(new Dimension(1000, 700));
+        setBackground(Color.GREEN);
+        GridBagConstraints positionConst = new GridBagConstraints();
+        track = new Track();
+        start = new JButton("Start");
+        addCar = new JButton("Add Car");
+        redVal = new JTextField();
+        redVal.setEditable(true);
+        greenVal = new JTextField();
+        greenVal.setEditable(true);
+        blueVal = new JTextField();
+        blueVal.setEditable(true);
+        positionConst.insets = new Insets(5, 5, 5, 5);
+        positionConst.gridx = 0;
+        positionConst.gridy = 0;
+        add(redVal);
+        positionConst.gridx = 1;
+        add(greenVal);
+        positionConst.gridx = 2;
+        add(blueVal);
+        positionConst.gridx = 3;
+        add(addCar);
+        addCar.addActionListener(this);
+        positionConst.gridx = 4;
+        add(start);
+        start.addActionListener(this);
+    }
     @Override
     public void paintComponent(Graphics page) {
         super.paintComponent(page);
@@ -36,5 +63,11 @@ public class TrackPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         //button presses
+        if(event.getSource().equals(start)) {
+            //
+        }
+        else if(event.getSource().equals(addCar)) {
+            //
+        }
     }
 }
