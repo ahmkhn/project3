@@ -1,13 +1,16 @@
+// Ahmed Khan
 public class CheckPoint {
     //Attributes
-    private int id, pathX, pathY, bX1, bY1, bX2, bY2;
+    private int id; // id = unique ID for each checkpoint i.e 1,2,3,...
+    private int pathX, pathY; // path = starting range of boundaries. i.e pixel 350X, 450Y
+    private int bX1, bY1, bX2, bY2; // checkpoint boundaries; boundaryX1, boundaryY1 ...
     private CheckPoint next, previous;
     //Methods
     public CheckPoint(int idNum, int x, int y) {
         id = idNum;
         pathX = x;
         pathY = y;
-        bX1 = x - 40;
+        bX1 = x - 40; // setting boundaries...
         bY1 = y - 40;
         bX2 = x + 40;
         bY2 = y + 40;
@@ -33,10 +36,11 @@ public class CheckPoint {
     public void setPrevious(CheckPoint point) {
         previous = point;
     }
-    public boolean onPoint(int x, int y) {
+    public boolean withinBoundaries(int x, int y) {
         if(x > bX1 && x < bX2 && y > bY1 && y < bY2) {
-            return false;
+            return true;
         }
         return false;
     }
+
 }
