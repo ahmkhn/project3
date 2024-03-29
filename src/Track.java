@@ -20,9 +20,10 @@ public class Track {
         gameTimer++;
         boolean result = false;
         for(Car car : cars) {
-            car.run();//Car: method that compares its coordinates with those of
-            //the next CheckPoint and moves toward it (ie if car's x > point's x, move in -x direction
-            if(!car.isFinished()) {//Car: need getter for finished
+            if(car.run()) {
+                car.setTime(gameTimer);//sets time as the car finishes
+            }
+            if(!car.isFinished()) {
                 result = true;
                 car.setTime(gameTimer);
             }
@@ -32,7 +33,7 @@ public class Track {
     public void finish() {
         // Add logic for game finish
         for (Car car : cars) {
-            car.setTime(gameTimer);
+            //car.setTime(gameTimer);
         }
     }
 
@@ -58,7 +59,7 @@ public class Track {
         return winner;
     }
 
-    void generateTrack() {
+    public void generateTrack() {
         // Generate checkpoints (A, B, C, D, ...)
         for (char c = 'A'; c <= 'Z'; c++) {//we'll need to work on this
             CheckPoint checkpoint = new CheckPoint(String.valueOf(c));

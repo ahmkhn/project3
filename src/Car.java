@@ -24,13 +24,13 @@ public class Car {
     }
 
     // New methods
-    public void run() {//The car should move toward current.getNext(),
+    public boolean run() {//The car should move toward current.getNext(),
         //set current to current.getNext on entry, and check if that point is
         //the goal point, if so, the car is finished
         if (!finished) {
             // Calculate direction
-            int dx = goal.getPathX() - posX;
-            int dy = goal.getPathY() - posY;
+            int dx = current.getNext().getPathX() - posX;
+            int dy = current.getNext().getPathY() - posY;
 
             // Normalize direction
             double distance = Math.sqrt(dx * dx + dy * dy);
@@ -42,14 +42,16 @@ public class Car {
             posY += ny * speed;
 
             // Check if reached goal
-            if (goal.onPoint(posX, posY)) {
-                current = goal;
-                goal = goal.getPrevious(); // Update to next goal in circular manner
-                if (goal == current) { // Simple way to check if finished, can be refined
+            if (current.getNext().onPoint(posX, posY)) {
+                current = current.getNext();
+                //goal = goal.getPrevious(); // Update to next goal in circular manner
+                if (current.equals(goal)) { // Simple way to check if finished, can be refined
                     finished = true;
+                    return true;//return true when reaching the goal
                 }
             }
         }
+        return false;
     }
 
     // Existing and new getters

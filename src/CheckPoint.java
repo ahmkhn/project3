@@ -10,10 +10,10 @@ public class CheckPoint {
         id = idNum;
         pathX = x;
         pathY = y;
-        bX1 = x - 40; // setting boundaries...
-        bY1 = y - 40;
-        bX2 = x + 40;
-        bY2 = y + 40;
+        bX1 = x - 20; // setting boundaries...
+        bY1 = y - 20;
+        bX2 = x + 20;
+        bY2 = y + 20;
     }
     public int getId() {
         return id;
@@ -42,5 +42,14 @@ public class CheckPoint {
         }
         return false;
     }
-
+    @Override
+    public boolean equals(Object o) {
+        if(super.equals(o) && getClass() == o.getClass()) {
+            if(id == ((CheckPoint) o).getId() && pathX == ((CheckPoint) o).getPathX() && pathY == ((CheckPoint) o).getPathY()
+            && next.getId() == ((CheckPoint) o).getNext().getId() && previous.getId() == ((CheckPoint) o).getPrevious().getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
