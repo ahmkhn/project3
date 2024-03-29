@@ -30,18 +30,18 @@ public class Track {
         }
         return result;//return true if at least one car has not finished, false if all finish
     }
-    public void finish() {
+    /*public void finish() {
         // Add logic for game finish
         for (Car car : cars) {
             //car.setTime(gameTimer);
         }
-    }
+    }*/
 
     public String results() {
         StringBuilder result = new StringBuilder("Game Results:\n");
         Car winner = findWinner();
         for (Car car : cars) {//only id, time, and ranking need to be displayed
-            result.append("Car ").append(car.getCarID()).append(" path: ").append(car.getPath()).append("\n");
+            //result.append("Car ").append(car.getCarID()).append(" path: ").append(car.getPath()).append("\n");
             result.append("Speed: ").append(car.getSpeed()).append("\n");
             result.append("Total Time: ").append(car.getTime()).append(" ticks\n\n");
         }

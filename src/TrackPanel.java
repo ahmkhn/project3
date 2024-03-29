@@ -66,11 +66,11 @@ public class TrackPanel extends JPanel implements ActionListener {
         gameEvent.setText(track.results());
         //implement a call for the finish/results
     }
-    private boolean colorCheck() {
+    /*private boolean colorCheck() {
         try {
             Integer
         }
-    }
+    }*/
     @Override
     public void actionPerformed(ActionEvent event) {
         //button presses

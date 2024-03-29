@@ -1,5 +1,9 @@
 import java.awt.*;
-
+/**
+ * Sample Comment, describe class in a general sense
+ * @author (people who worked on it)
+ * @version 1.0 (optional, but I usually include just for fun)
+ */
 public class Car {
     // Existing attributes
     private Color color;
@@ -9,6 +13,12 @@ public class Car {
     private boolean finished;
 
     // Existing constructor
+    /**
+     * Describe what the method does
+     * @param idNum what are these parameters for
+     * @param c
+     * @param start
+     */
     public Car(int idNum, Color c, CheckPoint start) {
         color = c;
         id = idNum;
