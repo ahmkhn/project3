@@ -5,7 +5,7 @@ public class Car {
     private Color color;
     private int id, speed;
     private CheckPoint current, goal;
-    private int posX, posY;
+    private int posX, posY, time;
     private boolean finished;
 
     // Existing constructor
@@ -18,6 +18,7 @@ public class Car {
         // Initializing position
         posX = current.getPathX();
         posY = current.getPathY();
+        time = 9999;
         // Random speed for demonstration, could be improved or made dynamic
         speed = 5 + (int) (Math.random() * 10);
     }
@@ -52,7 +53,7 @@ public class Car {
     }
 
     // Existing and new getters
-    public int getCarSpeed() {
+    public int getSpeed() {
         return this.speed;
     }
 
@@ -72,6 +73,10 @@ public class Car {
         return posY;
     }
 
+    public int getTime() {
+        return time;
+    }
+
     public boolean isFinished() {
         return finished;
     }
@@ -79,5 +84,9 @@ public class Car {
     public void setCheckpoint(CheckPoint currentC, CheckPoint goalC) {
         this.current = currentC;
         this.goal = goalC;
+    }
+
+    public void setTime(int timer) {
+        time = timer;
     }
 }
