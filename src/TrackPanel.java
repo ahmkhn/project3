@@ -5,14 +5,16 @@ import java.awt.event.ActionListener;
 
 public class TrackPanel extends JPanel implements ActionListener {
     //Attributes
+    private int counter;
     private Track track;
     private JButton start, addCar;
-    private JTextField redVal, greenVal, blueVal;
+    private JTextField redVal, greenVal, blueVal, gameEvent;
     //Methods
     public TrackPanel() {
         setPreferredSize(new Dimension(1000, 700));
         setBackground(Color.GREEN);
         GridBagConstraints positionConst = new GridBagConstraints();
+        counter = 0;
         track = new Track();
         start = new JButton("Start");
         addCar = new JButton("Add Car");
@@ -22,6 +24,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         greenVal.setEditable(true);
         blueVal = new JTextField();
         blueVal.setEditable(true);
+        gameEvent = new JTextField();
         positionConst.insets = new Insets(5, 5, 5, 5);
         positionConst.gridx = 0;
         positionConst.gridy = 0;
@@ -36,6 +39,8 @@ public class TrackPanel extends JPanel implements ActionListener {
         positionConst.gridx = 4;
         add(start);
         start.addActionListener(this);
+        positionConst.gridx = 5;
+        add(gameEvent);
     }
     @Override
     public void paintComponent(Graphics page) {
@@ -58,7 +63,13 @@ public class TrackPanel extends JPanel implements ActionListener {
         while(track.tick()) {
             repaint();
         }
+        gameEvent.setText(track.results());
         //implement a call for the finish/results
+    }
+    private boolean colorCheck() {
+        try {
+            Integer
+        }
     }
     @Override
     public void actionPerformed(ActionEvent event) {

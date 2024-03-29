@@ -40,7 +40,7 @@ public class Track {
     public String results() {
         StringBuilder result = new StringBuilder("Game Results:\n");
         Car winner = findWinner();
-        for (Car car : cars) {
+        for (Car car : cars) {//only id, time, and ranking need to be displayed
             result.append("Car ").append(car.getCarID()).append(" path: ").append(car.getPath()).append("\n");
             result.append("Speed: ").append(car.getSpeed()).append("\n");
             result.append("Total Time: ").append(car.getTime()).append(" ticks\n\n");
@@ -49,7 +49,7 @@ public class Track {
         return result.toString();
     }
 
-    private Car findWinner() {
+    private Car findWinner() {//change to sort cars by the time they got
         Car winner = cars.get(0);
         for (Car car : cars) {
             if (car.getTime() < winner.getTime()) {
@@ -60,11 +60,13 @@ public class Track {
     }
 
     public void generateTrack() {
-        // Generate checkpoints (A, B, C, D, ...)
+        checkpoints.add(new CheckPoint(0, 100, 200));
+        //add CheckPoints to the list, then set the next and previous pointers
+        /*// Generate checkpoints (A, B, C, D, ...)
         for (char c = 'A'; c <= 'Z'; c++) {//we'll need to work on this
             CheckPoint checkpoint = new CheckPoint(String.valueOf(c));
             checkpoints.add(checkpoint);
-        }
+        }*/
     }
 
     public CheckPoint getRandomCheckpoint() {
