@@ -1,21 +1,27 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 
-
+// Represents a track for the car racing game.
 public class Track {
-    private ArrayList<CheckPoint> checkpoints;
-    private ArrayList<Car> cars;
-    private int gameTimer;
+    private ArrayList<CheckPoint> checkpoints;// List of checkpoints
+    private ArrayList<Car> cars; // List of cars
+    private int gameTimer; // Timer for the race
 
+    // Initializes a new instance of the Track class.
     public Track() {
+        // Initialization
         checkpoints = new ArrayList<>();
         cars = new ArrayList<>();
         gameTimer = 0;
     }
 
-    public void add(Car c) {
+    //Adds a car to the race.
+    public void addCar(Car c) {
+        // Add car to the list
         cars.add(c);
     }
+    //Updates the game state.
     public boolean tick() {//update frame
         gameTimer++;
         boolean result = false;
@@ -30,45 +36,54 @@ public class Track {
         }
         return result;//return true if at least one car has not finished, false if all finish
     }
-    /*public void finish() {
-        // Add logic for game finish
-        for (Car car : cars) {
-            //car.setTime(gameTimer);
-        }
-    }*/
-
     public String results() {
         StringBuilder result = new StringBuilder("Game Results:\n");
-        Car winner = findWinner();
-        for (Car car : cars) {//only id, time, and ranking need to be displayed
-            //result.append("Car ").append(car.getCarID()).append(" path: ").append(car.getPath()).append("\n");
-            result.append("Speed: ").append(car.getSpeed()).append("\n");
-            result.append("Total Time: ").append(car.getTime()).append(" ticks\n\n");
+
+        // Sort cars by their total time
+        cars.sort(Comparator.comparingInt(Car::getTime));
+
+        // Display each car's information
+        int rank = 1;
+        for (Car car : cars) {
+            result.append("Car ID: ").append(car.getCarID()).append(", Total Time: ").append(car.getTime()).append(", Rank: ").append(rank).append("\n");
+            rank++;
         }
-        result.append("Winner: Car ").append(winner.getCarID());
+
+        // Display the winner
+        //Car winner = cars.get(0);
+        //result.append("Winner: Car ").append(winner.getCarID()).append(", Total Time: ").append(winner.getTime()).append("\n");
+
         return result.toString();
     }
 
-    private Car findWinner() {//change to sort cars by the time they got
-        Car winner = cars.get(0);
-        for (Car car : cars) {
-            if (car.getTime() < winner.getTime()) {
-                winner = car;
-            }
-        }
-        return winner;
-    }
-
+    //Generates the track and sets up checkpoints.
     public void generateTrack() {
-        checkpoints.add(new CheckPoint(0, 100, 200));
-        //add CheckPoints to the list, then set the next and previous pointers
-        /*// Generate checkpoints (A, B, C, D, ...)
-        for (char c = 'A'; c <= 'Z'; c++) {//we'll need to work on this
-            CheckPoint checkpoint = new CheckPoint(String.valueOf(c));
-            checkpoints.add(checkpoint);
-        }*/
+        // Add CheckPoints to the list with appropriate coordinates
+        checkpoints.add(new CheckPoint(1, 100, 200));
+        checkpoints.add(new CheckPoint(2, 900, 200));
+        checkpoints.add(new CheckPoint(3, 900, 600));
+        checkpoints.add(new CheckPoint(4, 500, 600));
+        checkpoints.add(new CheckPoint(4, 500, 300));
+        checkpoints.add(new CheckPoint(6, 100, 300));
+
+        // Set the next and previous pointers for each CheckPoint
+        for (int i = 0; i < checkpoints.size(); i++) {
+            CheckPoint current = checkpoints.get(i);
+            CheckPoint next = checkpoints.get((i + 1) % checkpoints.size()); // Next CheckPoint in circular manner
+            CheckPoint previous = checkpoints.get((i - 1 + checkpoints.size()) % checkpoints.size()); // Previous CheckPoint in circular manner
+            current.setNext(next);
+            current.setPrevious(previous);
+            System.out.println(current.getPrevious().getId() + ", " + current.getId() + ", " + current.getNext().getId());
+        }
+        System.out.println(getPoints().size());
     }
 
+    public void reset() {
+        checkpoints = new ArrayList<>();
+        gameTimer = 0;
+    }
+
+    //Retrieves a random checkpoint.
     public CheckPoint getRandomCheckpoint() {
         Random random = new Random();
         return checkpoints.get(random.nextInt(checkpoints.size()));
@@ -78,7 +93,7 @@ public class Track {
     public ArrayList<CheckPoint> getPoints() {
         return checkpoints;
     }
-
+    //Getters
     public ArrayList<Car> getCars() {
         return cars;
     }
