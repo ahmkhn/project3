@@ -8,80 +8,88 @@ public class TrackPanel extends JPanel implements ActionListener {
     private int counter;
     private Track track;
     private JButton start, addCar;
-    private JTextField redVal, greenVal, blueVal, gameEvent;
+    private JTextField redVal, greenVal, blueVal;
+    private JTextArea gameEvent;
     //Methods
     public TrackPanel() {
         setPreferredSize(new Dimension(1000, 700));
         setBackground(Color.GREEN);
-        GridBagConstraints positionConst = new GridBagConstraints();
+
+        setLayout(new BorderLayout());
+
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout());
+
         counter = 1;
         track = new Track();
         track.generateTrack();
-        start = new JButton("Start");
-        addCar = new JButton("Add Car");
+
+        //topPanel.add(hint);
         redVal = new JTextField(4);
         redVal.setEditable(true);
         redVal.setBackground(Color.RED);
+        topPanel.add(redVal);
+
         greenVal = new JTextField(4);
         greenVal.setEditable(true);
         greenVal.setBackground(Color.GREEN);
+        topPanel.add(greenVal);
+
         blueVal = new JTextField(4);
         blueVal.setEditable(true);
         blueVal.setBackground(Color.BLUE);
-        gameEvent = new JTextField("Add some cars and get ready to start.", 50);
-        gameEvent.setEditable(false);
-        positionConst.insets = new Insets(5, 5, 5, 5);
-        positionConst.gridx = 0;
-        positionConst.gridy = 0;
-        add(redVal);
-        positionConst.gridx = 1;
-        add(greenVal);
-        positionConst.gridx = 2;
-        add(blueVal);
-        positionConst.gridx = 3;
-        add(addCar);
+        topPanel.add(blueVal);
+
+        addCar = new JButton("Add Car");
         addCar.addActionListener(this);
         addCar.setBackground(Color.WHITE);
-        positionConst.gridx = 4;
-        add(start);
+        topPanel.add(addCar);
+
+        start = new JButton("Start");
         start.addActionListener(this);
         start.setBackground(Color.WHITE);
-        positionConst.gridx = 5;
-        add(gameEvent);
+        topPanel.add(start);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        gameEvent = new JTextArea("Add some cars and get ready to start.");
+        gameEvent.setColumns(25);
+        gameEvent.setEditable(false);
+        add(gameEvent, BorderLayout.WEST);
+
         repaint();
     }
     @Override
     public void paintComponent(Graphics page) {
         super.paintComponent(page);
         Graphics2D g = (Graphics2D) page;
-        g.setColor(Color.DARK_GRAY);//basic idea for visual layout
-        g.fill(new Rectangle(200, 200,40, 40));
-        //can't get checkpoints properly
-        redVal.setText(""  + track.getPoints().size());
-        for(CheckPoint point : track.getPoints()) {//Track: need a getter for CheckPoint List
-            //g.setStroke(new BasicStroke(40));
-            //g.drawRect(200, 200,40, 40);
-            g.fill(new Rectangle(200, 200,40, 40));
-            //g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
+        //track.drawTrack(g);
+        g.setColor(Color.DARK_GRAY);
+        for(CheckPoint point : track.getPoints()) {
+            g.setStroke(new BasicStroke(60));
+
+            g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
         }
-        //g.setStroke(new BasicStroke());
-        for(Car car : track.getCars()) {//Track: need getter for Car list
-            g.setColor(car.getColor());//Car: need getters for color and posX and posY
+        g.setStroke(new BasicStroke());
+        for(Car car : track.getCars()) {
+            g.setColor(car.getColor());
             g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
         }
         g.setColor(Color.BLACK);
-        g.drawString("Enter numerical values between 0 and 255", 130, 45);
-        g.drawString("to select the car's color.", 130, 60);
-        g.drawString("Cars: " + track.getCars().size(), 20, 20);
+        g.drawString("Enter numerical values between 0 and 255", 370, 45);
+        g.drawString("to select the car's color.", 370, 60);
+        g.drawString("Cars: " + track.getCars().size(), 225, 45);
     }
     //effectively runs the program/race
     public void restart() {
         //runs the race
         while(track.tick()) {
             repaint();
+            //need a delay here
         }
         gameEvent.setText(track.results());
-        //implement a call for the finish/results
+
+        repaint();
         track.reset();
         addCar.addActionListener(this);
         addCar.setBackground(Color.WHITE);
@@ -93,38 +101,38 @@ public class TrackPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         //button presses
         if(event.getSource().equals(addCar)) {
-            System.out.println("|" + redVal.getText() + "," + greenVal.getText() + "," + blueVal.getText() + "|");
+            //System.out.println("|" + redVal.getText() + "," + greenVal.getText() + "," + blueVal.getText() + "|");
             try {
                 int r = Integer.parseInt(redVal.getText());
-                System.out.println(r);
+                //System.out.println(r);
                 if(r < 0 || r > 255) {
                     throw new Exception();
                 }
                 int g = Integer.parseInt(greenVal.getText());
-                System.out.println(g);
+                //System.out.println(g);
                 if(g < 0 || g > 255) {
                     throw new Exception();
                 }
                 int b = Integer.parseInt(blueVal.getText());
-                System.out.println(b);
+                //System.out.println(b);
                 if(b < 0 || b > 255) {
                     throw new Exception();
                 }
                 //why does it add 2?
-                track.addCar(new Car(counter, new Color(r, g, b), new CheckPoint(1, 500,500)));
-                //track.addCar(new Car(counter, new Color(r, g, b), track.getRandomCheckpoint())); getRandomCheckpoint doesn't work
+                //track.addCar(new Car(counter, new Color(r, g, b), new CheckPoint(1, 500,500)));
+                track.addCar(new Car(counter, new Color(r, g, b), track.getRandomCheckpoint()));
                 counter++;
                 gameEvent.setText("Added a Car.");
                 repaint();//why?
-                System.out.println(track.getCars().size());
+                //System.out.println(track.getCars().size());
             }
             catch(Exception e) {
-                gameEvent.setText("Could not add car, please enter numerical values between 0 and 255.");
+                gameEvent.setText("Could not add car.\nPlease enter numbers between 0 and 255.");
             }
         }
         else if(event.getSource().equals(start)) {
             if(track.getCars().size() < 1) {
-                gameEvent.setText("Could not Start. Please add at least one car.");
+                gameEvent.setText("Could not Start.\nPlease add at least one car.");
             }
             else {
                 start.removeActionListener(this);
