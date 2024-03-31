@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
@@ -32,7 +31,6 @@ public class Track {
             }
             if(!car.isFinished()) {
                 result = true;
-                car.setTime(gameTimer);
             }
         }
         return result;//return true if at least one car has not finished, false if all finish
@@ -64,8 +62,8 @@ public class Track {
         checkpoints.add(new CheckPoint(2, 900, 200));
         checkpoints.add(new CheckPoint(3, 900, 600));
         checkpoints.add(new CheckPoint(4, 500, 600));
-        checkpoints.add(new CheckPoint(5, 500, 300));
-        checkpoints.add(new CheckPoint(6, 300, 300));
+        checkpoints.add(new CheckPoint(5, 500, 400));
+        checkpoints.add(new CheckPoint(6, 300, 400));
 
         // Set the next and previous pointers for each CheckPoint
         for (int i = 0; i < checkpoints.size(); i++) {
@@ -77,32 +75,6 @@ public class Track {
             //System.out.println(current.getPrevious().getId() + ", " + current.getId() + ", " + current.getNext().getId());
         }
         //System.out.println(getPoints().size());
-    }
-
-    /*public void drawTrack(Graphics2D g) {
-        g.setColor(Color.DARK_GRAY);//basic idea for visual layout
-        //g.fill(new Rectangle(200, 200,40, 40));
-        //can't get checkpoints properly
-        System.out.println(checkpoints.size());//why does it become 0?
-        for(CheckPoint point : checkpoints) {
-            //g.setStroke(new BasicStroke(40));
-            //g.drawRect(200, 200,40, 40);
-            g.fill(new Rectangle(200, 200,40, 40));
-            //g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
-        }
-        //g.setStroke(new BasicStroke());
-        for(Car car : cars) {//Track: need getter for Car list
-            g.setColor(car.getColor());//Car: need getters for color and posX and posY
-            g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
-        }
-    }*/
-
-    public void printThing() {
-        System.out.println(getPoints().size());
-        System.out.println(checkpoints.size());
-        for(CheckPoint c : checkpoints) {
-            System.out.println(c.getPrevious().getId() + ", " + c.getId() + ", " + c.getNext().getId());
-        }
     }
 
     public void reset() {

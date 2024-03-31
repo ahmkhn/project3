@@ -24,7 +24,6 @@ public class TrackPanel extends JPanel implements ActionListener {
         track = new Track();
         track.generateTrack();
 
-        //topPanel.add(hint);
         redVal = new JTextField(4);
         redVal.setEditable(true);
         redVal.setBackground(Color.RED);
@@ -63,11 +62,16 @@ public class TrackPanel extends JPanel implements ActionListener {
     public void paintComponent(Graphics page) {
         super.paintComponent(page);
         Graphics2D g = (Graphics2D) page;
-        //track.drawTrack(g);
+        drawTrack(g);
+        g.setColor(Color.BLACK);
+        g.drawString("Enter numerical values between 0 and 255", 370, 45);
+        g.drawString("to select the car's color.", 370, 60);
+        g.drawString("Cars: " + track.getCars().size(), 225, 45);
+    }
+    private void drawTrack(Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
         for(CheckPoint point : track.getPoints()) {
             g.setStroke(new BasicStroke(60));
-
             g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
         }
         g.setStroke(new BasicStroke());
@@ -75,21 +79,24 @@ public class TrackPanel extends JPanel implements ActionListener {
             g.setColor(car.getColor());
             g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
         }
-        g.setColor(Color.BLACK);
-        g.drawString("Enter numerical values between 0 and 255", 370, 45);
-        g.drawString("to select the car's color.", 370, 60);
-        g.drawString("Cars: " + track.getCars().size(), 225, 45);
     }
+
     //effectively runs the program/race
     public void restart() {
         //runs the race
         while(track.tick()) {
-            repaint();
-            //need a delay here
+            Graphics g = this.getGraphics();
+            drawTrack((Graphics2D) g);
+            try {
+                Thread.sleep(20);
+            }
+            catch(Exception e) {
+                Thread.currentThread().interrupt();
+            }
         }
         gameEvent.setText(track.results());
 
-        repaint();
+
         track.reset();
         addCar.addActionListener(this);
         addCar.setBackground(Color.WHITE);
@@ -123,7 +130,7 @@ public class TrackPanel extends JPanel implements ActionListener {
                 track.addCar(new Car(counter, new Color(r, g, b), track.getRandomCheckpoint()));
                 counter++;
                 gameEvent.setText("Added a Car.");
-                repaint();//why?
+                repaint();
                 //System.out.println(track.getCars().size());
             }
             catch(Exception e) {
@@ -135,10 +142,13 @@ public class TrackPanel extends JPanel implements ActionListener {
                 gameEvent.setText("Could not Start.\nPlease add at least one car.");
             }
             else {
+                //track.getCars().get(0).setPosX(track.getCars().get(0).getPosX() + 10);
+                //track.getCars().get(1).setPosX(track.getCars().get(1).getPosX() + 10);
+                start.setBackground(Color.GRAY);
                 start.removeActionListener(this);
                 addCar.setBackground(Color.GRAY);
                 addCar.removeActionListener(this);
-                start.setBackground(Color.GRAY);
+                //repaint();
                 restart();
             }
         }
