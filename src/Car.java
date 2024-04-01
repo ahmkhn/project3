@@ -7,10 +7,10 @@ import java.awt.*;
 public class Car {
     // Existing attributes
     private Color color;
-    private int id, speed;
+    private int id, speed, posX, posY, time;
     private CheckPoint current, goal;
-    private int posX, posY, time;
     private boolean finished;
+    private String route;
 
     // Existing constructor
     /**
@@ -31,6 +31,7 @@ public class Car {
         time = 9999;
         // Random speed for demonstration, could be improved or made dynamic
         speed = 5 + (int) (Math.random() * 10);
+        route = "" + current.getId();
     }
 
     // New methods
@@ -54,6 +55,7 @@ public class Car {
             // Check if reached goal
             if (current.getNext().onPoint(posX, posY)) {
                 current = current.getNext();
+                route += current.getId();
                 //goal = goal.getPrevious(); // Update to next goal in circular manner
                 if (current.equals(goal)) { // Simple way to check if finished, can be refined
                     finished = true;
@@ -93,6 +95,23 @@ public class Car {
         return finished;
     }
 
+    public CheckPoint getGoal() {
+        return goal;
+    }
+
+    public String getRoute() {
+        String result = "(";
+        for(int i = 0; i < route.length(); i++) {
+            if(i >= route.length() - 1) {
+                result += route.charAt(i);
+            }
+            else {
+                result += route.charAt(i) + "->";
+            }
+        }
+        return result + ")";
+    }
+
     public void setCheckpoint(CheckPoint currentC, CheckPoint goalC) {
         this.current = currentC;
         this.goal = goalC;
@@ -100,5 +119,33 @@ public class Car {
 
     public void setTime(int timer) {
         time = timer;
+    }
+
+    /**
+     * Compares this Object to another.
+     * @param o Object to be compared
+     * @return true if Object o is the same as this Object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(super.equals(o) && getClass() == o.getClass()) {
+            if(id == ((Car) o).getCarID() && speed == ((Car) o).getSpeed() && color.equals(((Car) o).getColor()) && goal.equals(((Car) o).getGoal())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Returns a String containing information regarding the object's attributes.
+     * @return String listing object's key attributes
+     */
+    @Override
+    public String toString() {
+        String result = "Car ID: " + id + ", speed: " + speed + ", current position: (" + posX + ", " + posY +
+                ").\nLast checkpoint: point " + current.getId() + ", goal: point " + goal.getId();
+        if(finished) {
+            return result + ". Finished.";
+        }
+        return result + ". Not finished.";
     }
 }

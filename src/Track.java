@@ -45,12 +45,13 @@ public class Track {
         int rank = 1;
         for (Car car : cars) {
             result.append("Car ID: ").append(car.getCarID()).append(", Total Time: ").append(car.getTime()).append(", Rank: ").append(rank).append("\n");
+            result.append("Path: ").append(car.getRoute()).append("\n");
             rank++;
         }
 
         // Display the winner
-        //Car winner = cars.get(0);
-        //result.append("Winner: Car ").append(winner.getCarID()).append(", Total Time: ").append(winner.getTime()).append("\n");
+        Car winner = cars.get(0);
+        result.append("Winner: Car ").append(winner.getCarID()).append(", Total Time: ").append(winner.getTime()).append("\n");
 
         return result.toString();
     }
@@ -72,9 +73,7 @@ public class Track {
             CheckPoint previous = checkpoints.get((i - 1 + checkpoints.size()) % checkpoints.size()); // Previous CheckPoint in circular manner
             current.setNext(next);
             current.setPrevious(previous);
-            //System.out.println(current.getPrevious().getId() + ", " + current.getId() + ", " + current.getNext().getId());
         }
-        //System.out.println(getPoints().size());
     }
 
     public void reset() {
@@ -89,11 +88,43 @@ public class Track {
     }
 
     //Getters
+    public int getGameTimer() {
+        return gameTimer;
+    }
     public ArrayList<CheckPoint> getPoints() {
         return checkpoints;
     }
-    //Getters
     public ArrayList<Car> getCars() {
         return cars;
+    }
+    /**
+     * Compares this Object to another.
+     * @param o Object to be compared
+     * @return true if Object o is the same as this Object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(super.equals(o) && getClass() == o.getClass()) {
+            if(gameTimer == ((Track) o).getGameTimer() && checkpoints.equals(((Track) o).getPoints()) && cars.equals(((Track) o).getCars())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Returns a String containing information regarding the object's attributes.
+     * @return String listing object's key attributes
+     */
+    @Override
+    public String toString() {
+        String result = "Current Game Time: " + gameTimer + "\nCheckpoints:\n";
+        for(CheckPoint point : checkpoints) {
+            result += point.toString() + "\n";
+        }
+        result += "Cars:\n";
+        for(Car c : cars) {
+            result += c.toString() + "\n";
+        }
+        return result;
     }
 }

@@ -42,6 +42,11 @@ public class CheckPoint {
         }
         return false;
     }
+    /**
+     * Compares this Object to another.
+     * @param o Object to be compared
+     * @return true if Object o is the same as this Object
+     */
     @Override
     public boolean equals(Object o) {
         if(super.equals(o) && getClass() == o.getClass()) {
@@ -51,5 +56,13 @@ public class CheckPoint {
             }
         }
         return false;
+    }
+    /**
+     * Returns a String containing information regarding the object's attributes.
+     * @return String listing object's key attributes
+     */
+    @Override
+    public String toString() {
+        return "Checkpoint " + id + ", center at (" + pathX + ", " + pathY + ").\nPrevious point ID: " + previous.getId() + ". Next point ID: " + next.getId() + ".";
     }
 }

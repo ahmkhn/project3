@@ -20,7 +20,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
 
-        counter = 1;
+        counter = 0;
         track = new Track();
         track.generateTrack();
 
@@ -66,7 +66,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         g.setColor(Color.BLACK);
         g.drawString("Enter numerical values between 0 and 255", 370, 45);
         g.drawString("to select the car's color.", 370, 60);
-        g.drawString("Cars: " + track.getCars().size(), 225, 45);
+        g.drawString("Cars: " + counter, 225, 45);
     }
     private void drawTrack(Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
@@ -84,7 +84,7 @@ public class TrackPanel extends JPanel implements ActionListener {
     //effectively runs the program/race
     public void restart() {
         //runs the race
-        while(track.tick()) {
+        while(track.tick()) {//Each time the game updates
             Graphics g = this.getGraphics();
             drawTrack((Graphics2D) g);
             try {
@@ -95,43 +95,35 @@ public class TrackPanel extends JPanel implements ActionListener {
             }
         }
         gameEvent.setText(track.results());
-
-
+        //System.out.println(this.toString());
         track.reset();
         addCar.addActionListener(this);
         addCar.setBackground(Color.WHITE);
         start.addActionListener(this);
         start.setBackground(Color.WHITE);
-        counter = 1;
+        counter = 0;
     }
     @Override
     public void actionPerformed(ActionEvent event) {
         //button presses
         if(event.getSource().equals(addCar)) {
-            //System.out.println("|" + redVal.getText() + "," + greenVal.getText() + "," + blueVal.getText() + "|");
             try {
                 int r = Integer.parseInt(redVal.getText());
-                //System.out.println(r);
                 if(r < 0 || r > 255) {
                     throw new Exception();
                 }
                 int g = Integer.parseInt(greenVal.getText());
-                //System.out.println(g);
                 if(g < 0 || g > 255) {
                     throw new Exception();
                 }
                 int b = Integer.parseInt(blueVal.getText());
-                //System.out.println(b);
                 if(b < 0 || b > 255) {
                     throw new Exception();
                 }
-                //why does it add 2?
-                //track.addCar(new Car(counter, new Color(r, g, b), new CheckPoint(1, 500,500)));
-                track.addCar(new Car(counter, new Color(r, g, b), track.getRandomCheckpoint()));
                 counter++;
+                track.addCar(new Car(counter, new Color(r, g, b), track.getRandomCheckpoint()));
                 gameEvent.setText("Added a Car.");
                 repaint();
-                //System.out.println(track.getCars().size());
             }
             catch(Exception e) {
                 gameEvent.setText("Could not add car.\nPlease enter numbers between 0 and 255.");
@@ -142,15 +134,42 @@ public class TrackPanel extends JPanel implements ActionListener {
                 gameEvent.setText("Could not Start.\nPlease add at least one car.");
             }
             else {
-                //track.getCars().get(0).setPosX(track.getCars().get(0).getPosX() + 10);
-                //track.getCars().get(1).setPosX(track.getCars().get(1).getPosX() + 10);
                 start.setBackground(Color.GRAY);
                 start.removeActionListener(this);
                 addCar.setBackground(Color.GRAY);
                 addCar.removeActionListener(this);
-                //repaint();
+                //System.out.println(this.toString());
                 restart();
             }
         }
+    }
+    //getters
+    public int getCounter() {
+        return counter;
+    }
+    public Track getTrack() {
+        return track;
+    }
+    /**
+     * Compares this Object to another.
+     * @param o Object to be compared
+     * @return true if Object o is the same as this Object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(super.equals(o) && getClass() == o.getClass()) {
+            if(counter == ((TrackPanel) o).getCounter() && track.equals(((TrackPanel) o).getTrack())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Returns a String containing information regarding the object's attributes.
+     * @return String listing object's key attributes
+     */
+    @Override
+    public String toString() {
+        return "Current Cars: " + counter + "\n" + track.toString();
     }
 }
