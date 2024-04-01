@@ -21,7 +21,14 @@ public class Track {
         // Add car to the list
         cars.add(c);
     }
-    //Updates the game state.
+    /**
+     * Updates the game and increments the game timer.
+     * Calls run() to move and update each car,
+     * assigning them a final time when they finish.
+     * Checks if any Car is not finished and returns appropriately.
+     * @return false if all Cars have finished
+     * @author Jonathan Murphy
+     */
     public boolean tick() {//update frame
         gameTimer++;
         boolean result = false;
@@ -76,6 +83,10 @@ public class Track {
         }
     }
 
+    /**
+     * Resets the Track by removing all cars and setting gameTimer back to 0.
+     * @author Jonathan Murphy
+     */
     public void reset() {
         cars = new ArrayList<>();
         gameTimer = 0;

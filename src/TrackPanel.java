@@ -2,7 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/**
+ * A JPanel that displays a simulation of a racetrack.
+ * Allows users to add Car objects of different colors to random points on the
+ * track and watch them travel between checkpoints in real time.
+ * @author Jonathan Murphy
+ * @version 1.0
+ */
 public class TrackPanel extends JPanel implements ActionListener {
     //Attributes
     private int counter;
@@ -11,6 +17,10 @@ public class TrackPanel extends JPanel implements ActionListener {
     private JTextField redVal, greenVal, blueVal;
     private JTextArea gameEvent;
     //Methods
+    /**
+     * Constructor.
+     * Creates a Track object and sets up the Panel's layout.
+     */
     public TrackPanel() {
         setPreferredSize(new Dimension(1000, 700));
         setBackground(Color.GREEN);
@@ -58,6 +68,11 @@ public class TrackPanel extends JPanel implements ActionListener {
 
         repaint();
     }
+    /**
+     * Uses drawTrack to draw the track and update cars in real time.
+     * Displays additional information on the canvas.
+     * @param page Graphics on which contents are printed
+     */
     @Override
     public void paintComponent(Graphics page) {
         super.paintComponent(page);
@@ -68,6 +83,11 @@ public class TrackPanel extends JPanel implements ActionListener {
         g.drawString("to select the car's color.", 370, 60);
         g.drawString("Cars: " + counter, 225, 45);
     }
+    /**
+     * Draws the track graphic and car markers.
+     * Separate from paintComponent because it wouldn't work during the simulation.
+     * @param g Graphics2D on which the track is drawn
+     */
     private void drawTrack(Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
         for(CheckPoint point : track.getPoints()) {
@@ -80,8 +100,11 @@ public class TrackPanel extends JPanel implements ActionListener {
             g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
         }
     }
-
-    //effectively runs the program/race
+    /**
+     * The main part of the simulation.
+     * Uses track.tick() to update the program over and over until the race is finished.
+     * Displays the results and resets the simulation to allow users to start another.
+     */
     public void restart() {
         //runs the race
         while(track.tick()) {//Each time the game updates
@@ -103,6 +126,15 @@ public class TrackPanel extends JPanel implements ActionListener {
         start.setBackground(Color.WHITE);
         counter = 0;
     }
+    /**
+     * Detects and executes inputs from buttons.
+     * The addCar input takes numerical inputs between 0 and 255 from
+     * redVal, greenVal, and blueVal and makes a color out of them;
+     * It then adds a car of that color to the track at a random point.
+     * The start button checks if there is at least one car on the track;
+     * If so, it calls restart() to begin the simulation.
+     * @param event input from button
+     */
     @Override
     public void actionPerformed(ActionEvent event) {
         //button presses
@@ -143,10 +175,18 @@ public class TrackPanel extends JPanel implements ActionListener {
             }
         }
     }
-    //getters
+
+    /**
+     * Basic getter.
+     * @return attribute int counter
+     */
     public int getCounter() {
         return counter;
     }
+    /**
+     * Basic getter.
+     * @return attribute Track track
+     */
     public Track getTrack() {
         return track;
     }
