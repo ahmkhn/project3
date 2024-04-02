@@ -69,7 +69,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         repaint();
     }
     /**
-     * Uses drawTrack to draw the track and update cars in real time.
+     * Uses drawTrack to draw the track and cars.
      * Displays additional information on the canvas.
      * @param page Graphics on which contents are printed
      */
@@ -84,7 +84,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         g.drawString("Cars: " + counter, 225, 45);
     }
     /**
-     * Draws the track graphic and car markers.
+     * Draws the track graphic and car markers. Used to display cars' positions in real time.
      * Separate from paintComponent because it wouldn't work during the simulation.
      * @param g Graphics2D on which the track is drawn
      */
@@ -98,6 +98,17 @@ public class TrackPanel extends JPanel implements ActionListener {
         for(Car car : track.getCars()) {
             g.setColor(car.getColor());
             g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
+
+            // Arjenis Montenegro - Added a number on the cars for clarity of what car won
+            // Use Car's method to get the ID text color
+            g.setColor(car.getIdTextColor());
+            // Set the font for the ID
+            g.setFont(new Font("Arial", Font.BOLD, 12));
+            // Draw the car ID
+            String idString = Integer.toString(car.getCarID());
+            int stringWidth = g.getFontMetrics().stringWidth(idString);
+            int stringHeight = g.getFontMetrics().getHeight();
+            g.drawString(idString, car.getPosX() - stringWidth / 2, car.getPosY() + stringHeight / 4);
         }
     }
     /**
@@ -106,25 +117,26 @@ public class TrackPanel extends JPanel implements ActionListener {
      * Displays the results and resets the simulation to allow users to start another.
      */
     public void restart() {
-        //runs the race
-        while(track.tick()) {//Each time the game updates
-            Graphics g = this.getGraphics();
-            drawTrack((Graphics2D) g);
-            try {
-                Thread.sleep(20);
+        // Arjenis Montenegro - Fixed the flickering
+        new Thread(new Runnable() {
+            public void run() {
+                while (track.tick()) {
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    repaint();
+                }
+                gameEvent.setText(track.results());
+                track.reset();
+                addCar.addActionListener(TrackPanel.this);
+                addCar.setBackground(Color.WHITE);
+                start.addActionListener(TrackPanel.this);
+                start.setBackground(Color.WHITE);
+                counter = 0;
             }
-            catch(Exception e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        gameEvent.setText(track.results());
-        //System.out.println(this.toString());
-        track.reset();
-        addCar.addActionListener(this);
-        addCar.setBackground(Color.WHITE);
-        start.addActionListener(this);
-        start.setBackground(Color.WHITE);
-        counter = 0;
+        }).start();
     }
     /**
      * Detects and executes inputs from buttons.
@@ -170,12 +182,10 @@ public class TrackPanel extends JPanel implements ActionListener {
                 start.removeActionListener(this);
                 addCar.setBackground(Color.GRAY);
                 addCar.removeActionListener(this);
-                //System.out.println(this.toString());
                 restart();
             }
         }
     }
-
     /**
      * Basic getter.
      * @return attribute int counter

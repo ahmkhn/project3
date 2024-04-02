@@ -1,8 +1,9 @@
 import java.awt.*;
 /**
- * Sample Comment, describe class in a general sense
- * @author (people who worked on it)
- * @version 1.0 (optional, but I usually include just for fun)
+ * Represents a Car in a racing simulation. The Car is capable of navigating a track composed of a series of CheckPoints.
+ * Movement, identification, and completion status are all included within this class.
+ * @author Arjenis Montenegro
+ * @version 1.0
  */
 public class Car {
     // Existing attributes
@@ -12,89 +13,122 @@ public class Car {
     private boolean finished;
     private String route;
 
-    // Existing constructor
     /**
-     * Describe what the method does
-     * @param idNum what are these parameters for
-     * @param c
-     * @param start
+     * Constructs a Car object with an ID, color, and starting checkpoint.
+     * The starting position is obtained from the starting checkpoint, and initial settings like speed and route are also established.
+     * @param idNum The unique identifier for the car.
+     * @param c The color of the car.
+     * @param start The starting checkpoint for the car.
      */
     public Car(int idNum, Color c, CheckPoint start) {
         color = c;
         id = idNum;
         current = start;
-        goal = start.getPrevious(); // Assuming circular track where start's previous is the last checkpoint
+        goal = start.getPrevious();
         finished = false;
-        // Initializing position
         posX = current.getPathX();
         posY = current.getPathY();
         time = 9999;
-        // Random speed for demonstration, could be improved or made dynamic
         speed = 5 + (int) (Math.random() * 10);
         route = "" + current.getId();
     }
 
-    // New methods
-    public boolean run() {//The car should move toward current.getNext(),
-        //set current to current.getNext on entry, and check if that point is
-        //the goal point, if so, the car is finished
+    /**
+     * Advances the car towards the next checkpoint. This method calculates the next position based on current speed and direction.
+     * It updates the current checkpoint upon arrival and checks if the car has reached its goal.
+     * @return true if the car has reached the goal checkpoint, false otherwise.
+     */
+    public boolean run() {
         if (!finished) {
-            // Calculate direction
+
             int dx = current.getNext().getPathX() - posX;
             int dy = current.getNext().getPathY() - posY;
-
-            // Normalize direction
             double distance = Math.sqrt(dx * dx + dy * dy);
             double nx = dx / distance;
             double ny = dy / distance;
 
-            // Move towards the goal
             posX += nx * speed;
             posY += ny * speed;
 
-            // Check if reached goal
             if (current.getNext().onPoint(posX, posY)) {
                 current = current.getNext();
                 route += current.getId();
-                //goal = goal.getPrevious(); // Update to next goal in circular manner
-                if (current.equals(goal)) { // Simple way to check if finished, can be refined
+                if (current.equals(goal)) {
                     finished = true;
-                    return true;//return true when reaching the goal
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    // Existing and new getters
+    /**
+     * Determines the appropriate text color for the car's ID based on the brightness of the car's color.
+     * This helps maintain the visibility of the ID against the car's color.
+     * @return The color(black or white) that ensures the car's ID is visible against its background color.
+     */
+    public Color getIdTextColor() {
+        double brightness = (0.299 * this.color.getRed() + 0.587 * this.color.getGreen() + 0.114 * this.color.getBlue()) / 255;
+        if (brightness > 0.5) {
+            return Color.BLACK;
+        } else {
+            return Color.WHITE;
+        }
+    }
+
+    /**
+     * Basic getter.
+     * @return attribute int speed
+     */
     public int getSpeed() {
         return this.speed;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute int id
+     */
     public int getCarID() {
         return this.id;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute Color color
+     */
     public Color getColor() {
         return color;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute int posX
+     */
     public int getPosX() {
         return posX;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute int posY
+     */
     public int getPosY() {
         return posY;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute int time
+     */
     public int getTime() {
         return time;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute boolean finished
+     */
     public boolean isFinished() {
         return finished;
     }
-
+    /**
+     * Basic getter.
+     * @return attribute CheckPoint goal
+     */
     public CheckPoint getGoal() {
         return goal;
     }
@@ -111,12 +145,19 @@ public class Car {
         }
         return result + ")";
     }
-
+    /**
+     * A method for manually setting the starting and ending positions of a car.
+     * @param currentC CheckPoint set to current
+     * @param goalC CheckPoint set to goal
+     */
     public void setCheckpoint(CheckPoint currentC, CheckPoint goalC) {
         this.current = currentC;
         this.goal = goalC;
     }
-
+    /**
+     * Set method used to set the car's finish time upon reaching the gioal
+     * @param timer int set to time
+     */
     public void setTime(int timer) {
         time = timer;
     }
