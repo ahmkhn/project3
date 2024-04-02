@@ -16,7 +16,6 @@ public class Track {
      * Initializes a new instance of the Track class.
      */
     public Track() {
-
         checkpoints = new ArrayList<>();
         cars = new ArrayList<>();
         gameTimer = 0;
