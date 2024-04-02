@@ -69,7 +69,7 @@ public class TrackPanel extends JPanel implements ActionListener {
         repaint();
     }
     /**
-     * Uses drawTrack to draw the track and update cars in real time.
+     * Uses drawTrack to draw the track and cars.
      * Displays additional information on the canvas.
      * @param page Graphics on which contents are printed
      */
@@ -84,22 +84,22 @@ public class TrackPanel extends JPanel implements ActionListener {
         g.drawString("Cars: " + counter, 225, 45);
     }
     /**
-     * Draws the track graphic and car markers.
+     * Draws the track graphic and car markers. Used to display cars' positions in real time.
      * Separate from paintComponent because it wouldn't work during the simulation.
      * @param g Graphics2D on which the track is drawn
      */
-    // Arjenis Montenegro - Added a number on the cars for clarity of what car won
     private void drawTrack(Graphics2D g) {
         g.setColor(Color.DARK_GRAY);
-        for (CheckPoint point : track.getPoints()) {
+        for(CheckPoint point : track.getPoints()) {
             g.setStroke(new BasicStroke(60));
             g.drawLine(point.getPathX(), point.getPathY(), point.getNext().getPathX(), point.getNext().getPathY());
         }
         g.setStroke(new BasicStroke());
-        for (Car car : track.getCars()) {
+        for(Car car : track.getCars()) {
             g.setColor(car.getColor());
             g.fill(new Rectangle(car.getPosX() - 10, car.getPosY() - 10, 20, 20));
 
+            // Arjenis Montenegro - Added a number on the cars for clarity of what car won
             // Use Car's method to get the ID text color
             g.setColor(car.getIdTextColor());
             // Set the font for the ID
@@ -111,36 +111,13 @@ public class TrackPanel extends JPanel implements ActionListener {
             g.drawString(idString, car.getPosX() - stringWidth / 2, car.getPosY() + stringHeight / 4);
         }
     }
-
     /**
      * The main part of the simulation.
      * Uses track.tick() to update the program over and over until the race is finished.
      * Displays the results and resets the simulation to allow users to start another.
      */
-    /*public void restart() {
-        //runs the race
-        while(track.tick()) {//Each time the game updates
-            Graphics g = this.getGraphics();
-            drawTrack((Graphics2D) g);
-            try {
-                Thread.sleep(20);
-            }
-            catch(Exception e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        gameEvent.setText(track.results());
-        //System.out.println(this.toString());
-        track.reset();
-        addCar.addActionListener(this);
-        addCar.setBackground(Color.WHITE);
-        start.addActionListener(this);
-        start.setBackground(Color.WHITE);
-        counter = 0;
-    }*/
-
-    // Arjenis Montenegro - Tried to fix the flickering
     public void restart() {
+        // Arjenis Montenegro - Fixed the flickering
         new Thread(new Runnable() {
             public void run() {
                 while (track.tick()) {
@@ -152,16 +129,13 @@ public class TrackPanel extends JPanel implements ActionListener {
                     repaint();
                 }
                 gameEvent.setText(track.results());
-                track.reset();
                 addCar.addActionListener(TrackPanel.this);
                 addCar.setBackground(Color.WHITE);
                 start.addActionListener(TrackPanel.this);
                 start.setBackground(Color.WHITE);
-                counter = 0;
             }
         }).start();
     }
-
     /**
      * Detects and executes inputs from buttons.
      * The addCar input takes numerical inputs between 0 and 255 from
@@ -175,6 +149,11 @@ public class TrackPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         //button presses
         if(event.getSource().equals(addCar)) {
+            //removed from restart to try and fix the cars disappearing and added here instead
+            if (track.isRaceFinished()) {
+                track.reset();
+                counter = 0;
+            }
             try {
                 int r = Integer.parseInt(redVal.getText());
                 if(r < 0 || r > 255) {
@@ -206,12 +185,10 @@ public class TrackPanel extends JPanel implements ActionListener {
                 start.removeActionListener(this);
                 addCar.setBackground(Color.GRAY);
                 addCar.removeActionListener(this);
-                //System.out.println(this.toString());
                 restart();
             }
         }
     }
-
     /**
      * Basic getter.
      * @return attribute int counter

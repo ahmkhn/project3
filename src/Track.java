@@ -2,23 +2,30 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-// Represents a track for the car racing game.
-public class Track {
-    private ArrayList<CheckPoint> checkpoints;// List of checkpoints
-    private ArrayList<Car> cars; // List of cars
-    private int gameTimer; // Timer for the race
 
-    // Initializes a new instance of the Track class.
+/**
+ * Represents a racetrack for the car racing game.
+ * @author Yunjin Seo
+ */
+public class Track {
+    private ArrayList<CheckPoint> checkpoints;
+    private ArrayList<Car> cars;
+    private int gameTimer;
+
+    /**
+     * Initializes a new instance of the Track class.
+     */
     public Track() {
-        // Initialization
+
         checkpoints = new ArrayList<>();
         cars = new ArrayList<>();
         gameTimer = 0;
     }
-
-    //Adds a car to the race.
+    /**
+     * Adds a car to the racetrack.
+     * @param c The car to be added
+     */
     public void addCar(Car c) {
-        // Add car to the list
         cars.add(c);
     }
     /**
@@ -27,9 +34,9 @@ public class Track {
      * assigning them a final time when they finish.
      * Checks if any Car is not finished and returns appropriately.
      * @return false if all Cars have finished
-     * @author Jonathan Murphy
+     * @author Jonathan Murphy (This Method)
      */
-    public boolean tick() {//update frame
+    public boolean tick() {
         gameTimer++;
         boolean result = false;
         for(Car car : cars) {
@@ -40,15 +47,19 @@ public class Track {
                 result = true;
             }
         }
-        return result;//return true if at least one car has not finished, false if all finish
+        return result;
     }
+    /**
+     * Constructs and returns a String containing the final time and ranking of each car.
+     * @return String detailing the race's finish
+     */
     public String results() {
         StringBuilder result = new StringBuilder("Game Results:\n");
 
-        // Sort cars by their total time
+
         cars.sort(Comparator.comparingInt(Car::getTime));
 
-        // Display each car's information
+
         int rank = 1;
         for (Car car : cars) {
             result.append("Car ID: ").append(car.getCarID()).append(", Total Time: ").append(car.getTime()).append(", Rank: ").append(rank).append("\n");
@@ -56,7 +67,7 @@ public class Track {
             rank++;
         }
 
-        // Display the winner
+
         Car winner = cars.get(0);
         result.append("Winner: Car ").append(winner.getCarID()).append(", Total Time: ").append(winner.getTime()).append("\n");
         result.append("Add a car to restart");//  Arjenis Montenegro - Added for clarity
@@ -64,7 +75,10 @@ public class Track {
         return result.toString();
     }
 
-    //Generates the track and sets up checkpoints.
+    /**
+     * Generates the racetrack with predefined checkpoints and sets up their connections.
+     * @author Yunjin Seo
+     */
     public void generateTrack() {
         // Add CheckPoints to the list with appropriate coordinates
         checkpoints.add(new CheckPoint(1, 300, 200));
@@ -74,7 +88,7 @@ public class Track {
         checkpoints.add(new CheckPoint(5, 500, 400));
         checkpoints.add(new CheckPoint(6, 300, 400));
 
-        // Set the next and previous pointers for each CheckPoint
+
         for (int i = 0; i < checkpoints.size(); i++) {
             CheckPoint current = checkpoints.get(i);
             CheckPoint next = checkpoints.get((i + 1) % checkpoints.size()); // Next CheckPoint in circular manner
@@ -86,26 +100,54 @@ public class Track {
 
     /**
      * Resets the Track by removing all cars and setting gameTimer back to 0.
-     * @author Jonathan Murphy
+     * @author Jonathan Murphy (this Method)
      */
     public void reset() {
         cars = new ArrayList<>();
         gameTimer = 0;
     }
+    /**
+     * Checks if all cars have finished the race.
+     * This method loops through all the cars and checks their 'finished' status.
+     * @return true if all cars have finished the race, false otherwise.
+     */
+    public boolean isRaceFinished() {
+        for (Car car : cars) {
+            if (!car.isFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-    //Retrieves a random checkpoint.
+    /**
+     * Retrieves a random checkpoint from the racetrack.
+     * @return A random checkpoint
+     * @author Yunjin Seo
+     */
     public CheckPoint getRandomCheckpoint() {
         Random random = new Random();
         return checkpoints.get(random.nextInt(checkpoints.size()));
     }
 
-    //Getters
+    /**
+     * Basic getter.
+     * @return attribute int gameTimer
+     */
     public int getGameTimer() {
         return gameTimer;
     }
+    /**
+     * Basic getter.
+     * @return attribute ArrayList<CheckPoint> checkpoints
+     */
     public ArrayList<CheckPoint> getPoints() {
         return checkpoints;
     }
+    /**
+     * Basic getter.
+     * @return attribute ArrayList<Car> cars
+     */
     public ArrayList<Car> getCars() {
         return cars;
     }
