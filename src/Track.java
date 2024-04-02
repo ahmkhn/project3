@@ -6,6 +6,7 @@ import java.util.Random;
 /**
  * Represents a racetrack for the car racing game.
  * @author Yunjin Seo
+ * @version 1.0
  */
 public class Track {
     private ArrayList<CheckPoint> checkpoints;
@@ -76,7 +77,6 @@ public class Track {
 
     /**
      * Generates the racetrack with predefined checkpoints and sets up their connections.
-     * @author Yunjin Seo
      */
     public void generateTrack() {
         // Add CheckPoints to the list with appropriate coordinates
@@ -105,11 +105,23 @@ public class Track {
         cars = new ArrayList<>();
         gameTimer = 0;
     }
+    /**
+     * Checks if all cars have finished the race.
+     * This method loops through all the cars and checks their 'finished' status.
+     * @return true if all cars have finished the race, false otherwise.
+     */
+    public boolean isRaceFinished() {
+        for (Car car : cars) {
+            if (!car.isFinished()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Retrieves a random checkpoint from the racetrack.
      * @return A random checkpoint
-     * @author Yunjin Seo
      */
     public CheckPoint getRandomCheckpoint() {
         Random random = new Random();

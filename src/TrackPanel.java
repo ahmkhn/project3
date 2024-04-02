@@ -129,12 +129,10 @@ public class TrackPanel extends JPanel implements ActionListener {
                     repaint();
                 }
                 gameEvent.setText(track.results());
-                track.reset();
                 addCar.addActionListener(TrackPanel.this);
                 addCar.setBackground(Color.WHITE);
                 start.addActionListener(TrackPanel.this);
                 start.setBackground(Color.WHITE);
-                counter = 0;
             }
         }).start();
     }
@@ -151,6 +149,12 @@ public class TrackPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         //button presses
         if(event.getSource().equals(addCar)) {
+            //removed from restart to try and fix the cars disappearing and added here instead
+            if (track.isRaceFinished()) {
+                track.reset();
+                counter = 0;
+            }
+
             try {
                 int r = Integer.parseInt(redVal.getText());
                 if(r < 0 || r > 255) {
